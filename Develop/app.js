@@ -15,13 +15,20 @@ app.get('/notes', function(req, res){
     res.sendFile(__dirname + '/public/notes.html')
 });
 
+
+
 app.get('/api/notes', function(req, res){
     const dbJson = fs.readFileSync(__dirname + '/db/db.json', 'utf8');
     return res.json(JSON.parse(dbJson));
 });
 app.post('/api/notes',function(req,res){
     var newNotes = req.body;
+    console.log(newNotes)
+   const notes = JSON.parse(fs.readFileSync(__dirname + '/db/db.json', 'utf8'));
+   notes.push(newNotes);
+    fs.writeFileSync(__dirname + '/db/db.json',JSON.stringify(notes));
 
+    res.json(newNotes);
 });
 
 app.listen(3000, function(){
