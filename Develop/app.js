@@ -12,8 +12,10 @@ app.get('/notes', function(req, res){
 });
 
 app.get('/app/notes', function(req, res){
-    res.sendFile(__dirname)
+    var read = fs.readFileSync(__dirname + '/db/db.json', 'utf8');
+    return(json.parse(read))
 })
+
 
 app.listen(3000, function(){
     console.log('localhost:3000')
