@@ -23,25 +23,24 @@ app.get('/api/notes', function(req, res){
 });
 app.post('/api/notes',function(req,res){
     var newNotes = req.body;
-    //console.log(newNotes)
+    console.log(newNotes)
    const notes = JSON.parse(fs.readFileSync(__dirname + '/db/db.json', 'utf8'));
-   notes.push(newNotes);
+   notes.push({...newNotes, id:notes.length + 1});
     fs.writeFileSync(__dirname + '/db/db.json',JSON.stringify(notes));
 
     res.json(newNotes);
 });
-app.delete('/api/notes:id', function(req, res){
-    
+app.delete('/api/notes/:id', function(req, res){
+        const {id} = req.params;
         dbJson = fs.readFileSync(__dirname + '/db/db.json', 'utf8');
         dbJson = JSON.parse(dbJson);
-        req.body.id = dbJson.length;
-        console.log(dbJson);
-        console.log(req.body.id);
+        console.log(id);
         dbJson = dbJson.filter(function(note){
-            return note.id != req.params.id;
+            return note.id != id;
         })
         dbJson = JSON.stringify(dbJson);
         fs.writeFileSync(__dirname + '/db/db.json', dbJson);
+        res.sendStatus(200);
 });
 
 app.listen(3000, function(){
